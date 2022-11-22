@@ -1,0 +1,25 @@
+---
+title: "<br />`Extending Rmarkdown`"
+subtitle: "<br />"
+author: <br />Nicolas CASAJUS<br />.inst[nicolas.casajus at fondationbiodiversite.fr]
+date: .inst[Mardi 29 novembre 2022]
+output:
+  xaringan::moon_reader:
+    css: ["css/xaringan-themer.css", "css/custom.css"]
+    lib_dir: "libs"
+    seal: true
+    yolo: false
+    self_contained: false
+    nature:
+      ratio: "4:3"
+      titleSlideClass: ["right", "middle"]
+      highlightStyle: 'zenburn'
+      highlightLines: false
+      countIncrementalSlides: false
+      slideNumberFormat: "%current% / %total%"
+      beforeInit: "libs/macros.js"
+---
+
+
+
+## Introduction

@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <meta name="author" content=" Nicolas CASAJUS .inst[nicolas.casajus at fondationbiodiversite.fr]" />
     <script src="libs/header-attrs-2.18/header-attrs.js"></script>
+    <link href="libs/font-awesome-6.2.0/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome-6.2.0/css/v4-shims.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="css/custom.css" type="text/css" />
   </head>
@@ -30,15 +32,365 @@ class: right, middle, title-slide
 
 
 
-## Introduction
+## Table of contents
+
+.medium[
+.pull-left[
+1. Tips and Tricks
+  - Child
+  - `knitr::read_chunks()`
+  - params
+  - Figures &amp; Tables
+]
+
+.pull-right[
+**Output formats**
+
+- Reports (`HTML`, `PDF`, `DOCX`, `GitHub Document`)
+- Presentations (`xaringan`, `reveal.js`, `PPTX`)
+- Scientific articles (`rticles`)
+- Websites (`blogdown`, `distill`, `pkgdown`)
+- Books (`bookdown`)
+- Dashboards
+- GitHub Pages (for HTML outputs)
+
+**Bibliography**
+
+- RStudio &amp; Zotero
+- Zotero styles
+- `nocite: '@*'`
+
+**Theming**
+
+- Default themes
+- Extensions
+- Custom blocks
+
+**Miscellaneous**
+
+- Break list `&lt;!-- end --&gt;`
+- Hard line break `\ `, `&lt;br&gt;`, `\newline`
+]
+]
+---
+
+## Chunks options
+
+Usual way: 
+
+
+````r
+```{r 'chunk-name', echo=FALSE, fig.width=10, fig.cap='This is a long long long long caption.'}
+
+x &lt;- 1 + 2
+print(x)
+```
+````
+
+
+```
+## [1] 3
+```
+
+--
+
+&lt;br&gt;
+
+Alternatively:
+
+
+````r
+```{r}
+#| 'chunk-name',
+#| echo = FALSE,
+#| fig.width = 10,
+#| fig.cap = 'This is a long long
+#|   long long caption.'
+
+x &lt;- 1 + 2
+print(x)
+```
+````
+
+
+
+```
+## [1] 3
+```
+
+.medium[<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Quarto uses this syntax]
+
+---
+
+## Global chunks options
+
+Do not repeat same chunk options values across all chunks. Use instead a general
+chunk that will provide default values for all chunks.
+
+
+````r
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, message = FALSE,
+                      fig.width = 10, fig.height = 8, ...)
+```
+````
+
+--
+
+&lt;br&gt;
+
+You will be able to change locally (for specific chunk) the default value:
+
+
+
+````r
+```{r 'chunk-name', echo = TRUE}
+1 + 3
+```
+````
+
+
+```r
+1 + 3
+```
+
+```
+## [1] 4
+```
+
+
+---
+
+## Rmd with others languages
+
+.pull-left[
+**R code** - <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>
+
+
+
+
+````r
+```{r}
+
+
+person &lt;- "Jane Doe"
+paste0("Hello, ", person, "!")
+```
+````
+
+
+```
+## [1] "Hello, Jane Doe!"
+```
+]
+
+
+---
+
+## Rmd with others languages
+
+.pull-left[
+**R code** - <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>
+
+
+
+
+````r
+```{r}
+
+
+person &lt;- "Jane Doe"
+paste0("Hello, ", person, "!")
+```
+````
+
+
+```
+## [1] "Hello, Jane Doe!"
+```
+
+**Bash code** - <i class="fas fa-code" role="presentation" aria-label="code icon"></i>
+
+
+
+
+````r
+```{bash}
+#| engine.path='/bin/bash'
+
+person="Jane Doe"
+echo "Hello"$person"!"
+```
+````
+
+
+```
+## Hello, Jane Doe!
+```
+]
+
+.pull-right[
+**Python code** - <i class="fab fa-python" role="presentation" aria-label="python icon"></i>
+
+
+
+
+````r
+```{python}
+#| engine.path='/usr/local/bin/python3'
+
+person &lt;- "Jane Doe"
+f"Hello, {person}!"
+```
+````
+
+
+```
+## 'Hello, Jane Doe!'
+```
+
+**Ruby on Rails code** - <i class="fas fa-code" role="presentation" aria-label="code icon"></i>
+
+
+
+
+
+````r
+```{ruby}
+#| engine.path='/usr/bin/ruby'
+
+person = "Jane Doe"
+puts "Hello, " + person + "!"
+```
+````
+
+
+```
+## Hello, Jane Doe!
+```
+]
+
+--
+
+
+```r
+Sys.which("python3")        ## Locate the Python3 engine (binary)
+```
+
+```
+##                  python3 
+## "/usr/local/bin/python3"
+```
+
+
+---
+
+## Rmd with others languages
+
+A smarter approach: use the global chunks options of `knitr`.
+
+
+```r
+## Global options ----
+knitr::opts_chunk$set(engine.path = list(python = "/usr/local/bin/python3"))
+```
+
+--
+
+&lt;br/&gt;
+
+And then,
+
+
+
+
+
+````r
+```{python}
+
+person &lt;- "Jane Doe"
+f"Hello, {person}!"
+```
+````
+
+
+```
+## 'Hello, Jane Doe!'
+```
+
+---
+
+## Resources
+
+.medium[
+- [**R Markdown Advanced Tips**](https://www.youtube.com/watch?v=WkF7nqEYF1E)
+&lt;br/&gt;<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Video by **Tom Mock**
+
+- [**Meta RMarkdown - Taxonomy and Use cases**](https://themockup.blog/posts/2020-07-25-meta-rmarkdown/)
+&lt;br/&gt;<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Blogpost by **Tom Mock**
+
+- [**R Markdown Cookbook**](https://bookdown.org/yihui/rmarkdown-cookbook/)
+&lt;br/&gt;<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Online book by **Yihui Xie et al.**
+
+- [**R Markdown: The Definitive Guide**](https://bookdown.org/yihui/rmarkdown/)
+&lt;br/&gt;<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Online book by **Yihui Xie et al.**
+
+- [**Dynamic Documents with R and knitr**](https://duhi23.github.io/Analisis-de-datos/Yihue.pdf)
+&lt;br/&gt;<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Online book by **Yihui Xie**
+
+- [**blogdown: Creating Websites with R Markdown**](https://bookdown.org/yihui/blogdown/)
+&lt;br/&gt;<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Online book by **Yihui Xie et al.**
+
+- [**bookdown: Authoring Books and Technical Documents with R Markdown**](https://bookdown.org/yihui/bookdown/)
+&lt;br/&gt;<i class="far fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> Online book by **Yihui Xie**
+]
+
+
+
+---
+
+## Custom blocks
+
+.pull-left[
+**In the `.Rmd` file**
+
+```
+::: {.box-info}
+Lorem ipsum dolor sit amet, consectetur adipiscing 
+elit. Suspendisse at mattis libero. Vestibulum 
+ante ipsum primis in faucibus...
+:::
+```
+]
+
+.pull-right[
+**CSS style**
+```css
+div.box-info p {
+  padding: 1em;
+  margin: 20px 0;
+  background: #DDECF6;
+  border: 1px solid #CEE9F2;
+  border-radius: 10px;
+  color: #487997;
+  border-left: 5px solid #487997;
+}
+```
+]
+
+&lt;br&gt;
+
+.center[![:scale 75%](img/custom-blocks.png)]
+
+.medium[Example: &lt;**https://github.com/rdatatoolbox/rmd-examples/custom-blocks/index.Rmd**&gt;]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script src="libs/macros.js"></script>
+<script src="libs/macro.js"></script>
 <script>var slideshow = remark.create({
 "ratio": "4:3",
 "highlightStyle": "zenburn",
-"highlightLines": false,
+"highlightLines": true,
 "countIncrementalSlides": false,
 "slideNumberFormat": "%current% / %total%"
 });
@@ -119,7 +471,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {
